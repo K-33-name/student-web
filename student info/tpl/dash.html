@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- LEFT SIDE -->
+    <div class="profile">
+        <h2>👤 {{ user[1] }}</h2>
+        <p>Student</p>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="details">
+        <h3>Profile Details</h3>
+
+        <p><b>Email:</b> {{ user[2] }}</p>
+        <p><b>University:</b> {{ user[3] }}</p>
+        <p><b>Class:</b> {{ user[4] }}</p>
+        <p><b>Age:</b> {{ user[5] }}</p>
+        <p><b>Mobile:</b> {{ user[6] }}</p>
+
+        <br>
+        <a href="/out">Logout</a>
+    </div>
+
+</div>
+
+</body>
+</html>
