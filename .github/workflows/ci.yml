@@ -1,0 +1,41 @@
+name: Flask CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: test_db
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    - run: pip install -r requirements.txt
+
+    - run: |
+        sudo apt-get install -y mysql-client
+        until mysql -h 127.0.0.1 -uroot -proot -e "SHOW DATABASES;"; do
+          sleep 5
+        done
+
+    - run: python app.py
