@@ -6,16 +6,21 @@ import os
 app = Flask(__name__, template_folder="tpl", static_folder="static")
 app.secret_key = os.getenv("SECRET_KEY", "set_secret")
 
-# DATABASE CONFIG
+# DATABASE CONFIG (Railway + Render ready)
 db_config = {
-    "host": os.getenv("DB_HOST", "localhost"),
-    "user": os.getenv("DB_USER", "root"),
-    "password": os.getenv("DB_PASSWORD", ""),
-    "database": os.getenv("DB_NAME", "setdb")
+    "host": os.getenv("DB_HOST"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+    "database": os.getenv("DB_NAME"),
+    "port": int(os.getenv("DB_PORT", 3306))
 }
 
 def get_db():
-    return mysql.connector.connect(**db_config)
+    try:
+        return mysql.connector.connect(**db_config)
+    except Exception as e:
+        print("DB ERROR:", e)
+        raise
 
 
 # HOME
@@ -43,7 +48,7 @@ def reg():
 
         cursor.execute(
             """INSERT INTO users
-            (name, email, university, class, age, mobile, password)
+            (name, email, university, user_class, age, mobile, password)
             VALUES (%s,%s,%s,%s,%s,%s,%s)""",
             (name, email, university, user_class, age, mobile, hashed)
         )
@@ -97,6 +102,7 @@ def out():
     return redirect("/")
 
 
-# RUN
+# RUN (Render compatible)
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
