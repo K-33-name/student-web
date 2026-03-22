@@ -99,7 +99,7 @@ def dash():
 @app.route("/out")
 def out():
     session.pop("user", None)
-    return redirect("/")
+    return redirect("/")  #update
 
 
 # RUN (Render compatible)
